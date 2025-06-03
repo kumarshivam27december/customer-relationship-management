@@ -1,12 +1,12 @@
 openapi: 3.0.0
 info:
-  title: Mini CRM API
+  title: CRM API
   version: 1.0.0
-  description: API documentation for the Mini CRM platform
+  description: API documentation for the CRM system
 
 servers:
-  - url: http://localhost:5000
-    description: Development server
+  - url: https://customer-relationship-management-3zxv.onrender.com
+    description: Production server
 
 paths:
   /api/customers:

@@ -2,7 +2,7 @@ const axios = require('axios');
 
 class VendorService {
   constructor() {
-    this.baseUrl = process.env.VENDOR_API_URL || 'http://localhost:5000/api/vendor';
+    this.baseUrl = process.env.VENDOR_API_URL || 'https://customer-relationship-management-3zxv.onrender.com/api/vendor';
   }
 
   async sendMessage(message, customer) {
