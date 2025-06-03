@@ -1,0 +1,204 @@
+openapi: 3.0.0
+info:
+  title: Mini CRM API
+  version: 1.0.0
+  description: API documentation for the Mini CRM platform
+
+servers:
+  - url: http://localhost:5000
+    description: Development server
+
+paths:
+  /api/customers:
+    get:
+      summary: Get all customers
+      responses:
+        '200':
+          description: List of customers
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Customer'
+    post:
+      summary: Create a new customer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomerInput'
+      responses:
+        '201':
+          description: Customer created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+
+  /api/campaigns:
+    get:
+      summary: Get all campaigns
+      responses:
+        '200':
+          description: List of campaigns
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Campaign'
+    post:
+      summary: Create a new campaign
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CampaignInput'
+      responses:
+        '201':
+          description: Campaign created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Campaign'
+
+  /api/vendor/receipt:
+    post:
+      summary: Receive delivery receipt from vendor
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeliveryReceipt'
+      responses:
+        '200':
+          description: Receipt received successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+components:
+  schemas:
+    Customer:
+      type: object
+      properties:
+        _id:
+          type: string
+        name:
+          type: string
+        email:
+          type: string
+        totalSpent:
+          type: number
+        visitCount:
+          type: number
+        lastVisit:
+          type: string
+          format: date-time
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    CustomerInput:
+      type: object
+      required:
+        - name
+        - email
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+        totalSpent:
+          type: number
+        visitCount:
+          type: number
+        lastVisit:
+          type: string
+          format: date-time
+
+    Campaign:
+      type: object
+      properties:
+        _id:
+          type: string
+        name:
+          type: string
+        segmentRules:
+          type: object
+        message:
+          type: string
+        status:
+          type: string
+          enum: [draft, sending, completed]
+        stats:
+          type: object
+          properties:
+            totalAudience:
+              type: number
+            sent:
+              type: number
+            failed:
+              type: number
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    CampaignInput:
+      type: object
+      required:
+        - name
+        - message
+        - segmentRules
+      properties:
+        name:
+          type: string
+        message:
+          type: string
+        segmentRules:
+          type: object
+          properties:
+            operator:
+              type: string
+              enum: [AND, OR]
+            conditions:
+              type: array
+              items:
+                type: object
+                properties:
+                  field:
+                    type: string
+                    enum: [totalSpent, visitCount, lastVisit]
+                  operator:
+                    type: string
+                    enum: [>, <, >=, <=, ==]
+                  value:
+                    type: number
+
+    DeliveryReceipt:
+      type: object
+      required:
+        - vendorMessageId
+        - status
+      properties:
+        vendorMessageId:
+          type: string
+        status:
+          type: string
+          enum: [sent, failed]
+        error:
+          type: string 
