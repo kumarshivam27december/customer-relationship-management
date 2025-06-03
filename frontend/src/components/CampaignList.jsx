@@ -12,8 +12,10 @@ import {
   TableRow,
   Typography,
   Chip,
+  Stack,
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
+import PeopleIcon from '@mui/icons-material/People';
 import axios from '../utils/axios';
 
 const CampaignList = () => {
@@ -73,13 +75,22 @@ const CampaignList = () => {
     <Box p={3}>
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
         <Typography variant="h5">Campaigns</Typography>
-        <Button
-          variant="contained"
-          startIcon={<AddIcon />}
-          onClick={() => navigate('/campaigns/create')}
-        >
-          Create Campaign
-        </Button>
+        <Stack direction="row" spacing={2}>
+          <Button
+            variant="outlined"
+            startIcon={<PeopleIcon />}
+            onClick={() => navigate('/customers')}
+          >
+            Manage Customers
+          </Button>
+          <Button
+            variant="contained"
+            startIcon={<AddIcon />}
+            onClick={() => navigate('/campaigns/create')}
+          >
+            Create Campaign
+          </Button>
+        </Stack>
       </Box>
 
       <TableContainer component={Paper}>

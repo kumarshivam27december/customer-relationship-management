@@ -19,9 +19,17 @@ export const AuthProvider = ({ children }) => {
   const checkAuth = async () => {
     try {
       const response = await axios.get('/api/auth/me');
-      setUser(response.data);
+      if (response.data) {
+        setUser(response.data);
+      } else {
+        // If no user data is returned, clear the token
+        localStorage.removeItem('token');
+        setUser(null);
+      }
     } catch (error) {
+      console.error('Auth check error:', error);
       localStorage.removeItem('token');
+      setUser(null);
     } finally {
       setLoading(false);
     }
@@ -31,11 +39,17 @@ export const AuthProvider = ({ children }) => {
     try {
       const response = await axios.post('/api/auth/google', { token: googleToken });
       const { token, user } = response.data;
-      localStorage.setItem('token', token);
-      setUser(user);
-      return true;
+      
+      if (token && user) {
+        localStorage.setItem('token', token);
+        setUser(user);
+        return true;
+      }
+      return false;
     } catch (error) {
       console.error('Login error:', error);
+      localStorage.removeItem('token');
+      setUser(null);
       return false;
     }
   };
@@ -46,7 +60,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, logout }}>
+    <AuthContext.Provider value={{ user, loading, login, logout, checkAuth }}>
       {children}
     </AuthContext.Provider>
   );

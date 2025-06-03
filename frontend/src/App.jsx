@@ -6,6 +6,7 @@ import Login from './components/Login';
 import CampaignList from './components/CampaignList';
 import CampaignCreate from './components/CampaignCreate';
 import CampaignDetails from './components/CampaignDetails';
+import CustomerManagement from './components/CustomerManagement';
 
 function App() {
   return (
@@ -34,6 +35,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <CampaignDetails />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/customers"
+            element={
+              <ProtectedRoute>
+                <CustomerManagement />
               </ProtectedRoute>
             }
           />
